@@ -41,8 +41,9 @@ LiquidCrystal visor(19,18,17,16,15,14);
   int peso =0;
   int tr = 0;
  // int temporizador = 0;
- 
+
  float calibration_factor = 343350;
+
 void setup() {
   
   Serial.begin(9600);
@@ -61,6 +62,7 @@ void setup() {
   visor.print("Balanca Auto");
   visor.setCursor(0,1);
   visor.print("0.2.2 Beta");
+
 }
 
 //float cont = 0;
@@ -68,6 +70,7 @@ void setup() {
 
 
 void loop() {
+
   Serial.println("sem numero");
   Serial.println(scale.get_units());
   
@@ -83,6 +86,7 @@ void loop() {
    // recebe leitura do teclado para a execucao do modulo desejad.   
   char key = teclado.getKey();
   
+
   
   if (key != NO_KEY){
     switch (key) {

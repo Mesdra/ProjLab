@@ -117,8 +117,9 @@ boolean medicaoAutPesso(){
 // uma funcao utilizada por outros modulos para fazer a dosagem correta de gesso.
   boolean realizaDosagenGesso(int pesoGesso){
     boolean condicao = true;
-    
+
    float pesagem = scale.get_units();
+
     pesagem = tara(pesagem);
     while(condicao){
           if(pesagem != 0){
