@@ -98,7 +98,9 @@ boolean medicaoAutPesso(){
     visor.print("Agua =");
     visor.print(mlAgua);
     delay(2000);
+    if(pesoGesso != 0)
      realizaDosagenGesso(pesoGesso);
+     
      realizaDosagenAgua(mlAgua);
 
      
@@ -113,52 +115,39 @@ boolean medicaoAutPesso(){
     
     }
 
+
   
 // uma funcao utilizada por outros modulos para fazer a dosagem correta de gesso.
   boolean realizaDosagenGesso(int pesoGesso){
+    pesoGesso = pesoGesso;
+
     boolean condicao = true;
-    
-   int pesagem = pesoG();
-    pesagem = tara(pesagem);
-    while(condicao){
-          if(pesagem != 0){
-            pesagem = pesoG();
-            pesagem = tara(pesagem);
-            delay(15);
-          }else{
-            condicao=false;
-            }
-            delay (500);
-        visor.clear();
-        visor.print("Pesagem G");
-        visor.print(pesagem);
-          }
+    scale.tare();
+   float pesagem = scale.get_units() * 1000;
           condicao = true;
-          delay(5000);
-          float linearPesagem = pesoGesso * 0.97; 
+          delay(1000);
+          
           abreFechaCompartimento(0);
     while(condicao){
       visor.clear();
       visor.print("Pesagem G");
       visor.print(pesagem);
-       pesagem = pesoG();
-       pesagem =pesagem - tr;
+       pesagem = scale.get_units() * 1000;
+       Serial.println(pesagem);
        reservatorio(0);
         if(pesagem >= pesoGesso){
            reservatorio(1);
            abreFechaCompartimento(1);
            return true;
           }
-        if(pesagem >=linearPesagem){
-          reservatorio(1);
-          delay(1000);
-             if(pesagem >= pesoGesso){
-              abreFechaCompartimento(1);
-              return true;
-          }
-          reservatorio(0);
-          delay(250);
-          }  
+          if(pesagem < -10){
+            visor.clear();
+            visor.print("dosagem Abortada");
+             reservatorio(1);
+             abreFechaCompartimento(1);
+           return false;
+           }
+    
         
       }
        
@@ -166,70 +155,51 @@ boolean medicaoAutPesso(){
     }
 // uma funcao utilizada por outros modulos para fazer a dosagem correta de Agua.
     boolean realizaDosagenAgua(int mlAgua){
-  
+
+     float pessoGesso = scale.get_units() * 1000;
     boolean condicao = true;
-   int pesagem = pesoG();
-   int pessoGesso = pesagem - tr;
-   
-    pesagem = tara(pesagem);
-    while(condicao){
-          if(pesagem != 0){
-            pesagem = pesoG();
-            pesagem = tara(pesagem);
-            delay(15);
-          }else{
-            condicao=false;
-            }
-            delay (500);
-        visor.clear();
-        visor.print("Agua ML");
-        visor.print(pesagem);
-          }
+    scale.tare();
+   float pesagem = scale.get_units() * 1000;
+    mlAgua = mlAgua-2;
+  
           condicao = true;
-          delay(5000);
+          delay(1000);
           float linearPesagem = mlAgua * 0.97; 
     while(condicao){
       visor.clear();
       visor.print("Pesagem Agua ML ");
       visor.setCursor(0,1);
       visor.print(pesagem);
-       pesagem = pesoG();
-       pesagem =pesagem - tr;
+       pesagem = scale.get_units() * 1000;
        releAgua(0);
-        if(pesagem >= mlAgua){
+        if(pesagem >= linearPesagem){
            releAgua(1);
+           delay(2000);
+            pesagem = scale.get_units() * 1000;
             visor.clear();
-            visor.print("FiM   ");
+            visor.print("FiM ");
             visor.print("Gesso =");
             visor.print(pessoGesso);
             visor.setCursor(0,1);
             visor.print("Agua ML =");
-            visor.print(pesagem);
+            visor.print(pesagem* 1.03);
            return true;
           }
-        if(pesagem >=linearPesagem){
-          releAgua(1);
-          delay(1000);
-             if(pesagem >= mlAgua){
-            visor.clear();  
-            visor.print("FiM   ");
-            visor.print("Gesso =");
-            visor.print(pessoGesso);
-            visor.setCursor(0,1);
-            visor.print("Agua ML =");
-            visor.print(pesagem);
-              return true;
-          }
-          releAgua(0);
-          delay(250);
-          }  
+   
+         if(pesagem < -10){
+            visor.clear();
+            visor.print("dosagem Abortada");
+             reservatorio(1);
+             abreFechaCompartimento(1);
+           return false;
+           }  
         
       }
       }
    // agre o compaterimento de gesso 
     boolean abreFechaCompartimento(int cond){
       if(cond == 0){
-        servoGesso.write(10);
+        servoGesso.write(5);
       }else{
           servoGesso.write(90);   
         }

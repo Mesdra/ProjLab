@@ -5,9 +5,14 @@
 #include <EEPROM.h>
 
 
-HX711 cell(11, 12);
+HX711 scale(11, 12);
 // instaciando visor e seu pinos que estao sendo usados no arduino
 LiquidCrystal visor(19,18,17,16,15,14);
+
+
+// struct eeprom
+float temp = 37.5;
+
 
 
 // funcoes da balanca
@@ -22,7 +27,8 @@ LiquidCrystal visor(19,18,17,16,15,14);
   boolean realizaDosagenAgua(int mlAgua);
   int pesoG();
   boolean dosagemGessoAguaAuto();
-   boolean  numero(char key);
+  boolean  numero(char key);
+ boolean pesagemm();
 
 // variaveis globais;
 
@@ -41,28 +47,71 @@ LiquidCrystal visor(19,18,17,16,15,14);
   int peso =0;
   int tr = 0;
  // int temporizador = 0;
+
+ float calibration_factor;
+
+
+
 void setup() {
-  
+
+    //calibration_factor = 326344;
+    EEPROM.get( 0, calibration_factor);
+  Serial.println(calibration_factor);
+ 
   Serial.begin(9600);
   visor.begin(16,2);
   servoGesso.attach(9);
-  servoGesso.write(90); 
-  // tara inicial da balanca pois sempre á uma oscilacao de 5g no sensor.
-   for(int i =0;i < 10;i++){
-     peso = pesoG();
+  servoGesso.write(90);
 
-    tara(peso);
+
+  //eeprom 
+  // float t = 326344;  //Variable to store in EEPROM.
+ // int eeAddress = 0;   //Location we want the data to be put.
+
+
+  //One simple call, with the address first and the object second.
+  //EEPROM.put(eeAddress, t);
+
+ // Serial.println("Written float data type!");
   
-    peso = peso -tr;
-     delay(400);
-    }
+//ler 
+ 
+  float f = 0;   //Variable to store data read from EEPROM.
+
+
+// eeprom
+  Serial.print( "Read float from EEPROM: " );
+
+  //Get the float data from the EEPROM at position 'eeAddress'
+  EEPROM.get( 0, f );
+  Serial.println( f, 3 );  //This may print 'ovf, nan' if the data inside the EEPROM is not a valid float.
+
+  
+   
+
+ 
+
+  //One simple call, with the address first and the object second.
+
+ 
+ 
+  // inicializa balanca
+  scale.set_scale(calibration_factor);  //Calibration Factor obtained from first sketch
+  scale.tare(); //Reset the scale to 0
+  
   pinMode(7,OUTPUT);
   pinMode(8,OUTPUT);
   digitalWrite(7, HIGH);
   digitalWrite(8,HIGH);     
   visor.print("Balanca Auto");
   visor.setCursor(0,1);
-  visor.print("0.1 Beta");
+  visor.print("0.2.4 Beta");
+
+
+ 
+   
+ 
+
 }
 
 //float cont = 0;
@@ -70,18 +119,19 @@ void setup() {
 
 
 void loop() {
-       //int pesagem = pesoG();
-     //if(pesagem != 0)
-       //pesagem = tara(pesagem);
-       // visor.clear();
-       // visor.print("Pesagem G");
-       //visor.print(pesagem);
+  //float units = scale.get_units() * 1000;
+
  
-   //val = ((cont-1)/cont) * val + (1/cont) * leitura;
-    
-   //Serial.println(val-zero);
+  
+ 
+//  Serial.print(" calibration_factor: ");
+//  Serial.print(calibration_factor);
+//Serial.println();
+  
+       
    // recebe leitura do teclado para a execucao do modulo desejad.   
   char key = teclado.getKey();
+  
 
   
   if (key != NO_KEY){
@@ -95,13 +145,24 @@ void loop() {
     dosagemGessoAguaAuto();
     break;
   case 'I':
-    releAgua(1);
+
+    float pesagem;
+   
+    while(teclado.getKey() != '*'){
+       pesagem = scale.get_units() * 1000;
+       visor.clear();
+       visor.print("Pesagem G");
+       visor.print(pesagem);
+       Serial.println(pesagem);
+       reservatorio(0);
+    }
+    reservatorio(1);
     break; 
   case 'O':
-    reservatorio(0);
+    calibragemBalanca();
     break;   
   case '0':
-    reservatorio(1);
+     pesagemm();
     break;
   //default:
     //temporizador = 0;
