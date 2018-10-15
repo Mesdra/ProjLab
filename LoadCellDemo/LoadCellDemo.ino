@@ -28,7 +28,8 @@ float temp = 37.5;
   int pesoG();
   boolean dosagemGessoAguaAuto();
   boolean  numero(char key);
- boolean pesagemm();
+  boolean pesagemm();
+  boolean dosagemGessoComAguaDefinida();
 
 // variaveis globais;
 
@@ -135,7 +136,7 @@ void loop() {
     break;
   case 'E':
   // medicao aonde a quantidade de agua ja entra definida no sistema e apenas é informado a quant de gesso.
-    dosagemGessoAguaAuto();
+    dosagemGessoComAguaDefinida();
     break;
   case 'I':
 
@@ -152,7 +153,7 @@ void loop() {
     reservatorio(1);
     break; 
   case 'O':
-    calibragemBalanca();
+    configuracoes()
     break;   
   case '0':
      pesagemm();

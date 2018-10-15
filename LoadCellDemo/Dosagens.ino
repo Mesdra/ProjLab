@@ -109,11 +109,70 @@ boolean medicaoAutPesso(){
   return true;
   }
 
-   boolean dosagemGessoAguaAuto(){
-      
+  boolean dosagemGessoComAguaDefinida(){
     
-    
+    boolean condicao = true;
+  int pesoGesso = 0 ;
+  char leitura[4] ;
+  int cont = 0;
+ 
+  visor.cursor();
+  visor.clear();
+  visor.print(" Quant? Geso G ");
+  visor.setCursor(0,1);
+
+  for(int i=0;i < 4; i++){
+      leitura[i] = ' ';
+      leitura2[i] = ' ';
     }
+    while(condicao){
+      char key = teclado.getKey();
+      if (key != NO_KEY){
+
+        if(cont < 3 && key != '#' && numero(key)){
+        leitura[cont] = key;
+        cont++; 
+        }else{
+          // ver se esta funcionando corretamente / deve apagar os dados digitados se o usuario escrever mais de 3 digitos.
+          cont = 0;
+           visor.cursor();
+           visor.clear();
+           visor.print(" Quant? Geso G ");
+           visor.setCursor(0,1);
+          } 
+        if(key =='*'){
+          // ver se vai dar certo/ deve apagar um informcao. se der certo fazer o mesmo com a segunda parte.
+           leitura[cont--] = ' ';
+           visor.cursor();
+           visor.clear();
+           visor.print(" Quant? Geso G ");
+           visor.setCursor(0,1);
+           cont--;
+           for(int i =0; i< cont ;i++){
+            visor.print(key);
+            cont++;
+            }
+          }  
+        if(key == '#'){
+          String pesso = leitura;
+          pesoGesso = pesso.toInt();
+          condicao = false;
+          }else{
+            visor.print(key);
+            }
+        }
+        
+      delay(200);
+      
+     
+    }
+    float agua = 0;
+    EEPROM.get(20,agua);
+    
+     realizaDosagenGesso(pesoGesso);
+     realizaDosagenAgua(agua);
+    
+  }
 
 
   
