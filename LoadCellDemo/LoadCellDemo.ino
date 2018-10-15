@@ -48,9 +48,13 @@ float temp = 37.5;
   int tr = 0;
  // int temporizador = 0;
 
+<<<<<<< HEAD:LoadCellDemo/LoadCellDemo.ino
  float calibration_factor;
 
 
+=======
+ float calibration_factor = 343350;
+>>>>>>> ef3edaf49d30f8510aa4dd97f9a08bc517940634:LoadCellDemo/LoadCellDemo/LoadCellDemo.ino
 
 void setup() {
 
@@ -61,6 +65,7 @@ void setup() {
   Serial.begin(9600);
   visor.begin(16,2);
   servoGesso.attach(9);
+<<<<<<< HEAD:LoadCellDemo/LoadCellDemo.ino
   servoGesso.write(90);
 
 
@@ -94,6 +99,9 @@ void setup() {
   //One simple call, with the address first and the object second.
 
  
+=======
+  servoGesso.write(5);
+>>>>>>> ef3edaf49d30f8510aa4dd97f9a08bc517940634:LoadCellDemo/LoadCellDemo/LoadCellDemo.ino
  
   // inicializa balanca
   scale.set_scale(calibration_factor);  //Calibration Factor obtained from first sketch
@@ -105,12 +113,16 @@ void setup() {
   digitalWrite(8,HIGH);     
   visor.print("Balanca Auto");
   visor.setCursor(0,1);
+<<<<<<< HEAD:LoadCellDemo/LoadCellDemo.ino
   visor.print("0.2.4 Beta");
 
 
  
    
  
+=======
+  visor.print("0.2.2 Beta");
+>>>>>>> ef3edaf49d30f8510aa4dd97f9a08bc517940634:LoadCellDemo/LoadCellDemo/LoadCellDemo.ino
 
 }
 
@@ -119,6 +131,7 @@ void setup() {
 
 
 void loop() {
+<<<<<<< HEAD:LoadCellDemo/LoadCellDemo.ino
   //float units = scale.get_units() * 1000;
 
  
@@ -128,6 +141,20 @@ void loop() {
 //  Serial.print(calibration_factor);
 //Serial.println();
   
+=======
+
+  Serial.println("sem numero");
+  Serial.println(scale.get_units());
+  
+  Serial.println("numero 1");
+  Serial.println(scale.get_units(),1);
+  
+  Serial.println("numero 2");
+  Serial.println(scale.get_units(),2);
+  
+  Serial.println("numero 3");
+  Serial.println(scale.get_units(),3);
+>>>>>>> ef3edaf49d30f8510aa4dd97f9a08bc517940634:LoadCellDemo/LoadCellDemo/LoadCellDemo.ino
        
    // recebe leitura do teclado para a execucao do modulo desejad.   
   char key = teclado.getKey();

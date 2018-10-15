@@ -122,8 +122,28 @@ boolean medicaoAutPesso(){
     pesoGesso = pesoGesso;
 
     boolean condicao = true;
+<<<<<<< HEAD:LoadCellDemo/Dosagens.ino
     scale.tare();
    float pesagem = scale.get_units() * 1000;
+=======
+
+   float pesagem = scale.get_units();
+
+    pesagem = tara(pesagem);
+    while(condicao){
+          if(pesagem != 0){
+            pesagem = pesoG();
+            pesagem = tara(pesagem);
+            delay(15);
+          }else{
+            condicao=false;
+            }
+            delay (500);
+        visor.clear();
+        visor.print("Pesagem G");
+        visor.print(pesagem);
+          }
+>>>>>>> ef3edaf49d30f8510aa4dd97f9a08bc517940634:LoadCellDemo/LoadCellDemo/Dosagens.ino
           condicao = true;
           delay(1000);
           
@@ -199,9 +219,13 @@ boolean medicaoAutPesso(){
    // agre o compaterimento de gesso 
     boolean abreFechaCompartimento(int cond){
       if(cond == 0){
+<<<<<<< HEAD:LoadCellDemo/Dosagens.ino
         servoGesso.write(5);
+=======
+        servoGesso.write(90);
+>>>>>>> ef3edaf49d30f8510aa4dd97f9a08bc517940634:LoadCellDemo/LoadCellDemo/Dosagens.ino
       }else{
-          servoGesso.write(90);   
+          servoGesso.write(5);   
         }
            
       }
